@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revision Quiz - Version 1.3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        h1, h2 { text-align: center; }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #222;
+            color: #fff;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+        .result { text-align: center; margin-top: 20px; font-size: 1.2em; }
+        .feedback { color: #28a745; }
+        .incorrect-feedback { color: #dc3545; }
+        .question-container { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Revision Quiz - Version 1.3</h1>
+        <div id="input-section">
+            <h2>Enter Questions and Answers</h2>
+            <input id="question" type="text" placeholder="Enter a question">
+            <input id="answer" type="text" placeholder="Enter the answer">
+            <button onclick="addQuestion()">Add Question</button>
+        </div>
+
+        <div id="quiz-section">
+            <div class="question-container" id="question-container">
+                <h2>Question <span id="question-number">1</span>:</h2>
+                <p id="display-question"></p>
+                <input id="user-answer" type="text" placeholder="Type your answer">
+                <button onclick="checkAnswer()">Submit Answer</button>
+                <div id="feedback" class="result"></div>
+            </div>
+            <button id="start-quiz-btn" onclick="startQuiz()">Start Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        let questions = [], currentQuestionIndex = 0, score = 0, version = '1.3';
+
+        function addQuestion() {
+            let question = document.getElementById('question').value.trim();
+            let answer = document.getElementById('answer').value.trim();
+            if (question && answer) {
+                questions.push({ question, answer });
+                document.getElementById('question').value = '';
+                document.getElementById('answer').value = '';
+                alert("Question added!");
+            } else {
+                alert("Please fill in both fields.");
+            }
+        }
+
+        function startQuiz() {
+            if (questions.length > 0) {
+                document.getElementById('start-quiz-btn').style.display = 'none';
+                showQuestion();
+            } else {
+                alert("Please add some questions first.");
+            }
+        }
+
+        function showQuestion() {
+            let question = questions[currentQuestionIndex].question;
+            document.getElementById('display-question').textContent = question;
+            document.getElementById('question-number').textContent = currentQuestionIndex + 1;
+            document.getElementById('user-answer').value = '';  // Clear the answer input
+            document.getElementById('question-container').style.display = 'block';
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById('user-answer').value.trim().toLowerCase();
+            let correctAnswer = questions[currentQuestionIndex].answer.trim().toLowerCase();
+            let feedback = document.getElementById('feedback');
+            if (userAnswer === correctAnswer) {
+                score++;
+                feedback.textContent = "Correct!";
+                feedback.className = 'result feedback';
+            } else {
+                feedback.textContent = `Incorrect! The correct answer is: ${correctAnswer}`;
+                feedback.className = 'result incorrect-feedback';
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(showQuestion, 1500); // Clear answer field and show next question
+            } else {
+                setTimeout(endQuiz, 1500); // End quiz after last question
+            }
+        }
+
+        function endQuiz() {
+            let feedback = document.getElementById('feedback');
+            let percentage = (score / questions.length) * 100;
+            feedback.innerHTML = `Quiz Over! Your score is: ${score} out of ${questions.length}.<br>Percentage Correct: ${percentage.toFixed(2)}%`;
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('start-quiz-btn').style.display = 'block';
+            score = 0;
+            currentQuestionIndex = 0;
+        }
+    </script>
+
+</body>
+</html>
