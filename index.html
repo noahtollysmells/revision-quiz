@@ -119,6 +119,15 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
+        /* Version Display */
+        #version {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            font-size: 14px;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -148,6 +157,9 @@
         <p>3. Tap on a flashcard to flip between the question and answer.</p>
         <button onclick="hideTutorial()">Got it!</button>
     </div>
+
+    <!-- Version Number -->
+    <div id="version">Version 1.0</div>
 
     <script>
         let flashcards = [];
